@@ -3,7 +3,8 @@ const ejs = require("ejs");
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const app = express();
-
+const portfolioRoute = require('./routes/portfolioRoute');
+const Portfolio = require('./models/Portfolio');
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -25,8 +26,12 @@ mongoose
 
 
 // routes
-app.get("/", (req,res) => {
-    res.render("index");
+app.use("/portfolio", portfolioRoute)
+app.get("/", async(req,res) => {
+    const portfolio = await Portfolio.find()
+    res.render("index", {
+        portfolio
+    });
 })
 // server
 app.listen(3000, () => {
